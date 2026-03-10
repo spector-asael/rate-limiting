@@ -9,11 +9,11 @@ include .envrc
 .PHONY: run help checkbalance deposit comment healthcheck all
 run: 
 	@echo 'Running application...'
-	@go run ./cmd/api -db-dsn="${BANK_DB_DSN}" -env=development 
+	@go run ./cmd/api -db-dsn="${BANK_DB_DSN}" -env=development -limiter-rps=2 -limiter-burst=5
 
 run-limit:
 	@echo 'Running application...'
-	@go run ./cmd/api -db-dsn="${BANK_DB_DSN}" -env=development -limiter-enabled=false
+	@go run ./cmd/api -db-dsn="${BANK_DB_DSN}" -env=development -limiter-enabled=false 
 
 # Help target
 help:

@@ -47,6 +47,14 @@ func main() {
 	flag.IntVar(&settings.Port, "port", 4000, "Server port")
 	flag.StringVar(&settings.Environment, "env", "development", "Environment(development|staging|production)")
 	flag.StringVar(&settings.DB.DSN, "db-dsn", "", "PostgreSQL DSN")
+    flag.Float64Var(&settings.Limiter.RPS, "limiter-rps", 2,
+                  "Rate Limiter maximum requests per second")
+
+    flag.IntVar(&settings.Limiter.Burst, "limiter-burst", 5,
+                  "Rate Limiter maximum burst")
+
+    flag.BoolVar(&settings.Limiter.Enabled, "limiter-enabled", true,
+                  "Enable rate limiter")
 
 	flag.Parse()
 
