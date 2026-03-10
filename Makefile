@@ -15,6 +15,12 @@ run-limit:
 	@echo 'Running application...'
 	@go run ./cmd/api -db-dsn="${BANK_DB_DSN}" -env=development -limiter-enabled=false 
 
+SHELL := /bin/bash
+
+limit-test:
+	@echo 'Testing rate limiter...'
+	@for i in {1..8}; do make checkbalance; done
+
 # Help target
 help:
 	@echo ""
@@ -48,6 +54,9 @@ help:
 	@echo "  Requires BANK_DB_DSN exported in .envrc"
 	@echo ""
 
+gracefulshutdown:
+	@echo "Testing graceful shutdown..."
+	curl -X GET http://localhost:4000/shutdown
 # POST /balance
 checkbalance:
 	@echo "Testing /balance..."

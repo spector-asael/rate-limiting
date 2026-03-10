@@ -18,6 +18,7 @@ func (a *ApplicationDependencies)Routes() http.Handler  {
    router.HandlerFunc(http.MethodDelete, "/v1/delete", a.deleteDepositHandler)
    router.HandlerFunc(http.MethodPatch, "/v1/update", a.updateDepositHandler)
    router.HandlerFunc(http.MethodPost, "/v1/transfer", TransferHandler)
+   router.HandlerFunc(http.MethodGet, "/shutdown", shutdownTestHandler)
 
    loggingMiddleware := a.loggingMiddleware(router)
    rateLimitMiddleware := a.rateLimit(loggingMiddleware)

@@ -18,14 +18,14 @@ func TransferHandler(w http.ResponseWriter, r *http.Request) {
 		Amount        float64 `json:"amount"`
 	}
 
-	// ❌ Manual JSON parsing (no DI)
+	// Manual JSON parsing (no DI)
 	err := readJSON(w, r, &input)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	// ❌ Manual validation
+	// Manual validation
 	if input.FromAccountID <= 0 || input.ToAccountID <= 0 {
 		http.Error(w, "account IDs must be provided", http.StatusBadRequest)
 		return
@@ -36,7 +36,7 @@ func TransferHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// ❌ Open DB inside handler (very bad practice)
+	// Open DB inside handler (very bad practice)
 	db, err := sql.Open("postgres", "postgres://banking:banking@localhost/banking?sslmode=disable")
 	if err != nil {
 		http.Error(w, "database connection error", 500)

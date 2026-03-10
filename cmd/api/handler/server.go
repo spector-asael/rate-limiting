@@ -33,7 +33,7 @@ func (a *ApplicationDependencies)Serve(settings *ServerConfig, appInstance *Appl
       // message about shutdown in process
       appInstance.Logger.Info("shutting down server", "signal", s.String())
      // create a context
-     ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+     ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
      defer cancel()
 
 
