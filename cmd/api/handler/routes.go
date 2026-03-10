@@ -20,7 +20,10 @@ func (a *ApplicationDependencies)Routes() http.Handler  {
    router.HandlerFunc(http.MethodPost, "/v1/transfer", TransferHandler)
 
    loggingMiddleware := a.loggingMiddleware(router)
-   panicMiddleware := a.recoverPanic(loggingMiddleware)
+   rateLimitMiddleware := a.rateLimit(loggingMiddleware)
+   panicMiddleware := a.recoverPanic(rateLimitMiddleware)
+       // Request sent first to recoverPanic() then sent to rateLimit()
+    // finally it is sent to the router.
    return panicMiddleware     
   
 }
