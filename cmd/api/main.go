@@ -4,9 +4,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log/slog"
-	"net/http"
 	"os"
 	"time"
 	"math/rand"
@@ -49,14 +47,6 @@ func main() {
 	flag.IntVar(&settings.Port, "port", 4000, "Server port")
 	flag.StringVar(&settings.Environment, "env", "development", "Environment(development|staging|production)")
 	flag.StringVar(&settings.DB.DSN, "db-dsn", "", "PostgreSQL DSN")
-    flag.Float64Var(&settings.Limiter.RPS, "limiter-rps", 2,
-                  "Rate Limiter maximum requests per second")
-
-    flag.IntVar(&settings.Limiter.Burst, "limiter-burst", 5,
-                  "Rate Limiter maximum burst")
-
-    flag.BoolVar(&settings.Limiter.Enabled, "limiter-enabled", true,
-                  "Enable rate limiter")
 
 	flag.Parse()
 
@@ -85,19 +75,10 @@ func main() {
 	},
 	}
 
-	apiServer := &http.Server{
-		Addr: fmt.Sprintf(":%d", settings.Port),
-		Handler: appInstance.Routes(), 
-		IdleTimeout: time.Minute,
-		ReadTimeout: 5 * time.Second,
-		WriteTimeout: 10 * time.Second, 
-		ErrorLog: slog.NewLogLogger(logger.Handler(), slog.LevelError),
-	}
+    err = appInstance.Serve(&settings, appInstance)
+    if err != nil {
+        logger.Error(err.Error())
+        os.Exit(1)
+    }
 
-	logger.Info("starting server", "address", apiServer.Addr,
-		"environment", settings.Environment)
-	
-	err = apiServer.ListenAndServe()
-	logger.Error(err.Error())
-	os.Exit(1)
 }
